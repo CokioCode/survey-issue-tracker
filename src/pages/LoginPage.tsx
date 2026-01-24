@@ -32,23 +32,24 @@ export const LoginPage = (props: LoginPageProps) => {
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10 bg-gradient-to-br from-background to-muted">
+      <div className="flex flex-col gap-4 p-6 md:p-10 bg-linear-to-br from-background to-muted">
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-sm">
             <LoginForm
               onSubmit={form.handleSubmit(handleLogin)}
-              control={form.control}
+              form={form}
+              isLoading
             />
           </div>
         </div>
       </div>
 
       <div className="relative hidden lg:block overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 to-chart-2/90 z-10" />
+        <div className="absolute inset-0 bg-linear-to-br from-primary/90 to-chart-2/90 z-10" />
         <Image
-          src="/14015.jpg"
+          src="/images/login.jpg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 10 h-full w-full object-cover"
           priority
           width={1000}
           height={1000}
