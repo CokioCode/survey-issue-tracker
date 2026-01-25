@@ -1,0 +1,614 @@
+[
+  {
+    "id": "clx8k2m9n0001abc123def456",
+    "header": "Cover page",
+    "type": "Cover page",
+    "status": "In Process",
+    "target": "18",
+    "limit": "5",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0002ghi789jkl012",
+    "header": "Table of contents",
+    "type": "Table of contents",
+    "status": "Done",
+    "target": "29",
+    "limit": "24",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0003mno345pqr678",
+    "header": "Executive summary",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "10",
+    "limit": "13",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0004stu901vwx234",
+    "header": "Technical approach",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "27",
+    "limit": "23",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0005yzb567cde890",
+    "header": "Design",
+    "type": "Narrative",
+    "status": "In Process",
+    "target": "2",
+    "limit": "16",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0006fgh123ijk456",
+    "header": "Capabilities",
+    "type": "Narrative",
+    "status": "In Process",
+    "target": "20",
+    "limit": "8",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0007lmn789opq012",
+    "header": "Integration with existing systems",
+    "type": "Narrative",
+    "status": "In Process",
+    "target": "19",
+    "limit": "21",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0008rst345uvw678",
+    "header": "Innovation and Advantages",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "25",
+    "limit": "26",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0009xyz901abc234",
+    "header": "Overview of EMR's Innovative Solutions",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "7",
+    "limit": "23",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0010def567ghi890",
+    "header": "Advanced Algorithms and Machine Learning",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "30",
+    "limit": "28",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0011jkl123mno456",
+    "header": "Adaptive Communication Protocols",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "9",
+    "limit": "31",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0012pqr789stu012",
+    "header": "Advantages Over Current Technologies",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "12",
+    "limit": "0",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0013vwx345yzb678",
+    "header": "Past Performance",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "22",
+    "limit": "33",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0014cde901fgh234",
+    "header": "Customer Feedback and Satisfaction Levels",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "15",
+    "limit": "34",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0015ijk567lmn890",
+    "header": "Implementation Challenges and Solutions",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "3",
+    "limit": "35",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0016opq123rst456",
+    "header": "Security Measures and Data Protection Policies",
+    "type": "Narrative",
+    "status": "In Process",
+    "target": "6",
+    "limit": "36",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0017uvw789xyz012",
+    "header": "Scalability and Future Proofing",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "4",
+    "limit": "37",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0018abc345def678",
+    "header": "Cost-Benefit Analysis",
+    "type": "Plain language",
+    "status": "Done",
+    "target": "14",
+    "limit": "38",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0019ghi901jkl234",
+    "header": "User Training and Onboarding Experience",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "17",
+    "limit": "39",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0020mno567pqr890",
+    "header": "Future Development Roadmap",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "11",
+    "limit": "40",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0021stu123vwx456",
+    "header": "System Architecture Overview",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "24",
+    "limit": "18",
+    "reviewer": "Maya Johnson"
+  },
+  {
+    "id": "clx8k2m9n0022yzb789cde012",
+    "header": "Risk Management Plan",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "15",
+    "limit": "22",
+    "reviewer": "Carlos Rodriguez"
+  },
+  {
+    "id": "clx8k2m9n0023fgh345ijk678",
+    "header": "Compliance Documentation",
+    "type": "Legal",
+    "status": "In Process",
+    "target": "31",
+    "limit": "27",
+    "reviewer": "Sarah Chen"
+  },
+  {
+    "id": "clx8k2m9n0024lmn901opq234",
+    "header": "API Documentation",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "8",
+    "limit": "12",
+    "reviewer": "Raj Patel"
+  },
+  {
+    "id": "clx8k2m9n0025rst567uvw890",
+    "header": "User Interface Mockups",
+    "type": "Visual",
+    "status": "In Process",
+    "target": "19",
+    "limit": "25",
+    "reviewer": "Leila Ahmadi"
+  },
+  {
+    "id": "clx8k2m9n0026xyz123abc456",
+    "header": "Database Schema",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "22",
+    "limit": "20",
+    "reviewer": "Thomas Wilson"
+  },
+  {
+    "id": "clx8k2m9n0027def789ghi012",
+    "header": "Testing Methodology",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "17",
+    "limit": "14",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0028jkl345mno678",
+    "header": "Deployment Strategy",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "26",
+    "limit": "30",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0029pqr901stu234",
+    "header": "Budget Breakdown",
+    "type": "Financial",
+    "status": "In Process",
+    "target": "13",
+    "limit": "16",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0030vwx567yzb890",
+    "header": "Market Analysis",
+    "type": "Research",
+    "status": "Done",
+    "target": "29",
+    "limit": "32",
+    "reviewer": "Sophia Martinez"
+  },
+  {
+    "id": "clx8k2m9n0031cde123fgh456",
+    "header": "Competitor Comparison",
+    "type": "Research",
+    "status": "In Process",
+    "target": "21",
+    "limit": "19",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0032ijk789lmn012",
+    "header": "Maintenance Plan",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "16",
+    "limit": "23",
+    "reviewer": "Alex Thompson"
+  },
+  {
+    "id": "clx8k2m9n0033opq345rst678",
+    "header": "User Personas",
+    "type": "Research",
+    "status": "In Process",
+    "target": "27",
+    "limit": "24",
+    "reviewer": "Nina Patel"
+  },
+  {
+    "id": "clx8k2m9n0034uvw901xyz234",
+    "header": "Accessibility Compliance",
+    "type": "Legal",
+    "status": "Done",
+    "target": "18",
+    "limit": "21",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0035abc567def890",
+    "header": "Performance Metrics",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "23",
+    "limit": "26",
+    "reviewer": "David Kim"
+  },
+  {
+    "id": "clx8k2m9n0036ghi123jkl456",
+    "header": "Disaster Recovery Plan",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "14",
+    "limit": "17",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0037mno789pqr012",
+    "header": "Third-party Integrations",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "25",
+    "limit": "28",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0038stu345vwx678",
+    "header": "User Feedback Summary",
+    "type": "Research",
+    "status": "Done",
+    "target": "20",
+    "limit": "15",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0039yzb901cde234",
+    "header": "Localization Strategy",
+    "type": "Narrative",
+    "status": "In Process",
+    "target": "12",
+    "limit": "19",
+    "reviewer": "Maria Garcia"
+  },
+  {
+    "id": "clx8k2m9n0040fgh567ijk890",
+    "header": "Mobile Compatibility",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "28",
+    "limit": "31",
+    "reviewer": "James Wilson"
+  },
+  {
+    "id": "clx8k2m9n0041lmn123opq456",
+    "header": "Data Migration Plan",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "19",
+    "limit": "22",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0042rst789uvw012",
+    "header": "Quality Assurance Protocols",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "30",
+    "limit": "33",
+    "reviewer": "Priya Singh"
+  },
+  {
+    "id": "clx8k2m9n0043xyz345abc678",
+    "header": "Stakeholder Analysis",
+    "type": "Research",
+    "status": "In Process",
+    "target": "11",
+    "limit": "14",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0044def901ghi234",
+    "header": "Environmental Impact Assessment",
+    "type": "Research",
+    "status": "Done",
+    "target": "24",
+    "limit": "27",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0045jkl567mno890",
+    "header": "Intellectual Property Rights",
+    "type": "Legal",
+    "status": "In Process",
+    "target": "17",
+    "limit": "20",
+    "reviewer": "Sarah Johnson"
+  },
+  {
+    "id": "clx8k2m9n0046pqr123stu456",
+    "header": "Customer Support Framework",
+    "type": "Narrative",
+    "status": "Done",
+    "target": "22",
+    "limit": "25",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0047vwx789yzb012",
+    "header": "Version Control Strategy",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "15",
+    "limit": "18",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0048cde345fgh678",
+    "header": "Continuous Integration Pipeline",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "26",
+    "limit": "29",
+    "reviewer": "Michael Chen"
+  },
+  {
+    "id": "clx8k2m9n0049ijk901lmn234",
+    "header": "Regulatory Compliance",
+    "type": "Legal",
+    "status": "In Process",
+    "target": "13",
+    "limit": "16",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0050opq567rst890",
+    "header": "User Authentication System",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "28",
+    "limit": "31",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0051uvw123xyz456",
+    "header": "Data Analytics Framework",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "21",
+    "limit": "24",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0052abc789def012",
+    "header": "Cloud Infrastructure",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "16",
+    "limit": "19",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0053ghi345jkl678",
+    "header": "Network Security Measures",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "29",
+    "limit": "32",
+    "reviewer": "Lisa Wong"
+  },
+  {
+    "id": "clx8k2m9n0054mno901pqr234",
+    "header": "Project Timeline",
+    "type": "Planning",
+    "status": "Done",
+    "target": "14",
+    "limit": "17",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0055stu567vwx890",
+    "header": "Resource Allocation",
+    "type": "Planning",
+    "status": "In Process",
+    "target": "27",
+    "limit": "30",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0056yzb123cde456",
+    "header": "Team Structure and Roles",
+    "type": "Planning",
+    "status": "Done",
+    "target": "20",
+    "limit": "23",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0057fgh789ijk012",
+    "header": "Communication Protocols",
+    "type": "Planning",
+    "status": "In Process",
+    "target": "15",
+    "limit": "18",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0058lmn345opq678",
+    "header": "Success Metrics",
+    "type": "Planning",
+    "status": "Done",
+    "target": "30",
+    "limit": "33",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0059rst901uvw234",
+    "header": "Internationalization Support",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "23",
+    "limit": "26",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0060xyz567abc890",
+    "header": "Backup and Recovery Procedures",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "18",
+    "limit": "21",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0061def123ghi456",
+    "header": "Monitoring and Alerting System",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "25",
+    "limit": "28",
+    "reviewer": "Daniel Park"
+  },
+  {
+    "id": "clx8k2m9n0062jkl789mno012",
+    "header": "Code Review Guidelines",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "12",
+    "limit": "15",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0063pqr345stu678",
+    "header": "Documentation Standards",
+    "type": "Technical content",
+    "status": "In Process",
+    "target": "27",
+    "limit": "30",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0064vwx901yzb234",
+    "header": "Release Management Process",
+    "type": "Planning",
+    "status": "Done",
+    "target": "22",
+    "limit": "25",
+    "reviewer": "Assign reviewer"
+  },
+  {
+    "id": "clx8k2m9n0065cde567fgh890",
+    "header": "Feature Prioritization Matrix",
+    "type": "Planning",
+    "status": "In Process",
+    "target": "19",
+    "limit": "22",
+    "reviewer": "Emma Davis"
+  },
+  {
+    "id": "clx8k2m9n0066ijk123lmn456",
+    "header": "Technical Debt Assessment",
+    "type": "Technical content",
+    "status": "Done",
+    "target": "24",
+    "limit": "27",
+    "reviewer": "Eddie Lake"
+  },
+  {
+    "id": "clx8k2m9n0067opq789rst012",
+    "header": "Capacity Planning",
+    "type": "Planning",
+    "status": "In Process",
+    "target": "21",
+    "limit": "24",
+    "reviewer": "Jamik Tashpulatov"
+  },
+  {
+    "id": "clx8k2m9n0068uvw345xyz678",
+    "header": "Service Level Agreements",
+    "type": "Legal",
+    "status": "Done",
+    "target": "26",
+    "limit": "29",
+    "reviewer": "Assign reviewer"
+  }
+]

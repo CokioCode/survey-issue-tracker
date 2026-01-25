@@ -8,8 +8,11 @@ interface ButtonProps {
   children: React.ReactNode;
 }
 
-const SubmitButton = (props: ButtonProps) => {
-  const { isLoading, className, children } = props;
+export const SubmitButton = ({
+  isLoading,
+  className,
+  children,
+}: ButtonProps) => {
   return (
     <Button
       type="submit"

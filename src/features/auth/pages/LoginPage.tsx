@@ -5,15 +5,24 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import {
-  FeatureItem,
-  type FeatureItemProps,
-} from "@/components/common/FeatureItem";
-import { LoginForm } from "@/components/fragments/LoginForm";
-import { loginSchema } from "@/lib/validation";
+import { FeatureItem } from "@/components/forms/FeatureItem";
+import { LoginForm } from "@/features/auth/components/LoginForm";
+import { loginSchema } from "@/features/auth/types";
+import { usePost } from "@/hooks/useApi";
+import { setCookie } from "@/lib/utils";
+import type { ApiResponse, FeatureItem as FeatureItemTypes } from "@/types";
+
+interface LoginResponse {
+  token: string;
+  user: {
+    id: string;
+    username: string;
+    email?: string;
+  };
+}
 
 interface LoginPageProps {
-  data: FeatureItemProps[];
+  data: FeatureItemTypes[];
 }
 
 export const LoginPage = (props: LoginPageProps) => {
@@ -26,8 +35,22 @@ export const LoginPage = (props: LoginPageProps) => {
     },
   });
 
-  const handleLogin = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const loginAction = usePost<
+    ApiResponse<LoginResponse>,
+    z.infer<typeof loginSchema>
+  >("/auth/login", {
+    isAuth: false,
+    invalidateQueries: [["users"]],
+    onSuccess: (response) => {
+      if (response.data?.token) {
+        setCookie("token", response.data.token);
+        window.location.href = "/admin/dashboard";
+      }
+    },
+  });
+
+  const handleLogin = async (values: z.infer<typeof loginSchema>) => {
+    await loginAction.mutateAsync(values);
   };
 
   return (
@@ -38,7 +61,7 @@ export const LoginPage = (props: LoginPageProps) => {
             <LoginForm
               onSubmit={form.handleSubmit(handleLogin)}
               form={form}
-              isLoading
+              isLoading={loginAction.isPending}
             />
           </div>
         </div>

@@ -1,15 +1,15 @@
 import Link from "next/link";
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
-
+import {
+  CustomFormField,
+  FormFieldType,
+} from "@/components/forms/CustomFormField";
+import { SubmitButton } from "@/components/forms/SubmitButton";
 import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
+import type { loginSchema } from "@/features/auth/types";
 import { cn } from "@/lib/utils";
-import type { loginSchema } from "@/lib/validation";
-import CustomFormField, {
-  FormFieldType,
-} from "@/components/common/CustomFormField";
-import SubmitButton from "@/components/common/SubmitButton";
 
 interface LoginFormProps extends React.ComponentProps<"form"> {
   form: UseFormReturn<z.infer<typeof loginSchema>>;

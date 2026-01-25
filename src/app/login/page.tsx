@@ -1,11 +1,10 @@
 "use client";
 
 import { Clipboard, FileWarning, SignalIcon } from "lucide-react";
+import { LoginPage } from "@/features/auth/pages/LoginPage";
+import type { FeatureItem } from "@/types";
 
-import type { FeatureItemProps } from "@/components/common/FeatureItem";
-import { LoginPage } from "@/pages/LoginPage";
-
-const data: FeatureItemProps[] = [
+const data: FeatureItem[] = [
   {
     icon: Clipboard,
     title: "Easy Surveys",
