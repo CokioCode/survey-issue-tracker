@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -25,4 +26,11 @@ export function setCookie(
 
 export function removeCookie(name: string) {
   Cookies.remove(name);
+}
+
+export function decodeJwt<T = Record<string, unknown>>(
+  token?: string,
+): T | null {
+  if (!token) return null;
+  return jwtDecode<T>(token);
 }

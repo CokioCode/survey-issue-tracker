@@ -48,6 +48,7 @@ export const LoginForm = ({
             name="password"
             label="Password"
             placeholder="********"
+            type="password"
             iconSrc="/icons/lock.svg"
           />
 

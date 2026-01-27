@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-
 import { FeatureItem } from "@/components/forms/FeatureItem";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { loginSchema } from "@/features/auth/types";
@@ -18,6 +18,7 @@ interface LoginResponse {
     id: string;
     username: string;
     email?: string;
+    role?: "USER" | "ADMIN";
   };
 }
 
@@ -26,6 +27,8 @@ interface LoginPageProps {
 }
 
 export const LoginPage = (props: LoginPageProps) => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
@@ -44,8 +47,13 @@ export const LoginPage = (props: LoginPageProps) => {
     onSuccess: (response) => {
       if (response.data?.token) {
         setCookie("token", response.data.token);
-        window.location.href = "/admin/dashboard";
       }
+
+      const dashboardPath =
+        response.data.user.role === "USER"
+          ? "/users/dashboard"
+          : "/admin/dashboard";
+      router.replace(dashboardPath);
     },
   });
 

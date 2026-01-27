@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
-import { getCookie } from "./utils";
+import { getCookie, removeCookie } from "./utils";
 
 interface FetcherOptions extends Omit<AxiosRequestConfig, "url"> {
   isAuth?: boolean;
@@ -10,10 +10,43 @@ const api = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": true,
   },
 });
 
 export const serverFetcher = async <T = unknown>(
+  url: string,
+  options: FetcherOptions = {},
+): Promise<T> => {
+  const { isAuth = false, ...restOptions } = options;
+
+  try {
+    const config: AxiosRequestConfig = {
+      url,
+      ...restOptions,
+    };
+
+    // For server-side, we can't access cookies directly
+    // Token should be passed explicitly or retrieved from request headers
+    if (isAuth) {
+      // If running on server, token should be passed in options or headers
+      if (restOptions.headers?.Authorization) {
+        config.headers = {
+          ...config.headers,
+          ...restOptions.headers,
+        };
+      }
+    }
+
+    const response: AxiosResponse<T> = await api(config);
+    return response.data;
+  } catch (error) {
+    console.error("Server fetcher error:", error);
+    throw error;
+  }
+};
+
+export const clientFetcher = async <T = unknown>(
   url: string,
   options: FetcherOptions = {},
 ): Promise<T> => {
@@ -38,31 +71,13 @@ export const serverFetcher = async <T = unknown>(
 
     const response: AxiosResponse<T> = await api(config);
     return response.data;
-  } catch (error) {
-    console.error("Server fetcher error:", error);
-    throw error;
-  }
-};
-
-export const clientFetcher = async <T = unknown>(
-  url: string,
-  options: FetcherOptions = {},
-): Promise<T> => {
-  const { isAuth = false, ...restOptions } = options;
-
-  try {
-    const config: AxiosRequestConfig = {
-      url,
-      withCredentials: isAuth,
-      ...restOptions,
-    };
-
-    const response: AxiosResponse<T> = await api(config);
-    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
+      // Clear the token cookie on 401 error
+      removeCookie("token");
       window.location.href = "/login";
     }
+    console.log(error);
     throw error;
   }
 };
@@ -125,6 +140,21 @@ export const clientDel = <T = unknown>(
   isAuth = false,
 ): Promise<T> => {
   return clientFetcher<T>(url, { method: "DELETE", isAuth });
+};
+
+export const serverFetcherWithToken = async <T = unknown>(
+  url: string,
+  token: string,
+  options: Omit<FetcherOptions, "isAuth"> = {},
+): Promise<T> => {
+  return serverFetcher<T>(url, {
+    ...options,
+    isAuth: true,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export default api;
