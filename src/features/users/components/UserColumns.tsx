@@ -141,5 +141,4 @@ export const createUserColumns = (
   },
 ];
 
-// Keep the original export for backward compatibility
 export const columns = createUserColumns();

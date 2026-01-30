@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { FilterDrawer } from "@/features/surveys/components/FilterDrawer";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -115,6 +116,7 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
             disabled={loading}
           />
+          <FilterDrawer />
           {onCreateClick && (
             <Button onClick={onCreateClick} className="gap-2">
               <Plus className="h-4 w-4" />
