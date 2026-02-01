@@ -1,22 +1,56 @@
 "use client";
 
+import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { DeleteDialog } from "@/components/dialog/DeleteDialog";
 import { DataTable } from "@/components/table/DataTable";
 import { useDelete, useGet, usePost, usePut } from "@/hooks/useApi";
 import { useTablePagination } from "@/hooks/useTablePagination";
+import { decodeJwt, getCookie } from "@/lib/utils";
 import type { ApiResponse } from "@/types";
 import { createSurveyColumns } from "../components/SurveryCollumn";
-import { SurveyDialog } from "../components/SurveyDialog";
-import type { Survey, UpdateSurvey } from "../types";
+import { SurveyDetailDialog, SurveyDialog } from "../components/SurveyDialog";
+import type { Filter, Survey, UpdateSurvey } from "../types";
 
 export const SurveyPage = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
 
-  const pagination = useTablePagination(10);
+  const [filters, setFilters] = useState<Filter>({
+    rabHild: "",
+    statusJt: "APPROVE",
+    sto: "",
+    tahun: "",
+  });
+
+  const token = getCookie("token");
+  const decoded = decodeJwt<{
+    userId: string;
+    username: string;
+    role: "ADMIN" | "USER";
+    iat: number;
+    exp: number;
+  }>(token);
+
+  const pagination = useTablePagination(5);
+
+  const buildQueryString = () => {
+    const params = new URLSearchParams();
+    params.append("page", pagination.page.toString());
+    params.append("limit", pagination.pageSize.toString());
+    params.append("search", pagination.searchQuery);
+
+    if (filters.statusJt) params.append("statusJt", filters.statusJt);
+    if (filters.rabHild) params.append("rabHild", filters.rabHild);
+    if (filters.sto) params.append("sto", filters.sto);
+    if (filters.tahun) params.append("tahun", filters.tahun);
+
+    return params.toString();
+  };
+
+  const isAdmin = decoded?.role === "ADMIN";
 
   const { data, isLoading } = useGet<{
     success: boolean;
@@ -24,10 +58,26 @@ export const SurveyPage = () => {
     meta: { page: number; limit: number; total: number };
     data: Survey[];
   }>(
-    ["survey", pagination.page, pagination.pageSize, pagination.searchQuery],
-    `/survey?page=${pagination.page}&limit=${pagination.pageSize}&search=${pagination.searchQuery}&statusJt=NOT_APPROVE`,
+    [
+      "survey",
+      pagination.page,
+      pagination.pageSize,
+      pagination.searchQuery,
+      filters,
+    ],
+    `/survey?${buildQueryString()}`,
     { isAuth: true },
   );
+
+  const syncSurveyMutation = usePost<
+    ApiResponse<{
+      success: boolean;
+      message: string;
+    }>
+  >("/sync", {
+    isAuth: true,
+    invalidateQueries: [["survey"]],
+  });
 
   const updateSurveyMutation = usePut<ApiResponse<Survey>, UpdateSurvey>(
     `/admin/survey/${selectedSurvey?.nomorNcx}`,
@@ -45,31 +95,35 @@ export const SurveyPage = () => {
     },
   );
 
+  const handleSync = async () => {
+    await syncSurveyMutation.mutateAsync(null);
+  };
+
+  const handleFilterChange = (newFilters: Filter) => {
+    setFilters(newFilters);
+    pagination.handlePageChange(1);
+  };
+
   const handleSubmitSurvey = async (values: UpdateSurvey) => {
     if (selectedSurvey) {
       await updateSurveyMutation.mutateAsync(values);
     }
-    handleCloseDialog();
+    handleCloseEditDialog();
   };
 
-  const handleOpenDialog = (survey: Survey) => {
+  const handleOpenEditDialog = (survey: Survey) => {
     setSelectedSurvey(survey);
-    setIsDialogOpen(true);
+    setIsEditDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
+  const handleCloseEditDialog = () => {
+    setIsEditDialogOpen(false);
     setSelectedSurvey(null);
   };
 
-  const handleOpenViewDialog = (survey: Survey) => {
+  const handleOpenDetailDialog = (survey: Survey) => {
     setSelectedSurvey(survey);
-    setIsViewDialogOpen(true);
-  };
-
-  const handleCloseViewDialog = () => {
-    setIsViewDialogOpen(false);
-    setSelectedSurvey(null);
+    setIsDetailDialogOpen(true);
   };
 
   const handleOpenDeleteDialog = (survey: Survey) => {
@@ -85,16 +139,17 @@ export const SurveyPage = () => {
   };
 
   const surveyColumns = createSurveyColumns({
-    onEdit: handleOpenDialog,
+    onEdit: handleOpenEditDialog,
     onDelete: handleOpenDeleteDialog,
-    onView: handleOpenViewDialog,
+    onView: handleOpenDetailDialog,
+    isAdmin,
   });
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-5">
       <DataTable
         title="Survey Data"
-        description="Manage and view all survey data with NOT_APPROVE status"
+        description="Manage and view all survey data"
         columns={surveyColumns}
         data={data?.data ?? []}
         loading={isLoading}
@@ -105,24 +160,43 @@ export const SurveyPage = () => {
         totalRows={data?.meta?.total ?? 0}
         onPageChange={pagination.handlePageChange}
         onPageSizeChange={pagination.handlePageSizeChange}
+        onFilterChange={handleFilterChange}
+        onCreateClick={handleSync}
+        createButtonText={
+          syncSurveyMutation.isPending ? (
+            <RefreshCw className="animate-spin" />
+          ) : (
+            <RefreshCw />
+          )
+        }
+        disabled={syncSurveyMutation.isPending}
+        isAdmin={isAdmin}
       />
 
-      {selectedSurvey && (
+      {isAdmin && selectedSurvey && (
         <SurveyDialog
-          isOpen={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
+          isOpen={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
           onSubmit={handleSubmitSurvey}
           survey={selectedSurvey}
         />
       )}
 
-      <DeleteDialog
-        isOpen={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={handleConfirmDelete}
-        userName={selectedSurvey?.namaPelanggan ?? ""}
-        isLoading={deleteSurveyMutation.isPending}
+      <SurveyDetailDialog
+        isOpen={isDetailDialogOpen}
+        onOpenChange={setIsDetailDialogOpen}
+        survey={selectedSurvey}
       />
+
+      {isAdmin && (
+        <DeleteDialog
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onConfirm={handleConfirmDelete}
+          userName={selectedSurvey?.namaPelanggan ?? ""}
+          isLoading={deleteSurveyMutation.isPending}
+        />
+      )}
     </div>
   );
 };

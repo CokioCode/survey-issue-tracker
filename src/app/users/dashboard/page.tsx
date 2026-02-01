@@ -1,5 +1,13 @@
-const page = () => {
-  return <div>page</div>;
-};
+import { ChartAreaInteractive } from "@/components/charts/ChartAreaInteractive";
+import { SectionCards } from "@/features/dashboard/components/SectionCards";
 
-export default page;
+export default function Page() {
+  return (
+    <>
+      <SectionCards />
+      <div className="px-4 lg:px-6">
+        <ChartAreaInteractive />
+      </div>
+    </>
+  );
+}

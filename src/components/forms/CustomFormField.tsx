@@ -152,12 +152,15 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
     case FormFieldType.SELECT:
       return (
         <FormControl>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={props.placeholder} />
-              </SelectTrigger>
-            </FormControl>
+          <Select
+            value={field.value}
+            onValueChange={field.onChange}
+            disabled={props.disabled}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={props.placeholder} />
+            </SelectTrigger>
+
             <SelectContent className="shad-select-content">
               {props.children}
             </SelectContent>

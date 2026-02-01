@@ -34,6 +34,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FilterDrawer } from "@/features/surveys/components/FilterDrawer";
+import type { Filter } from "@/features/surveys/types";
+import { useMounted } from "@/hooks/useMounted";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,7 +43,7 @@ interface DataTableProps<TData, TValue> {
   title?: string;
   description?: string;
   onCreateClick?: () => void;
-  createButtonText?: string;
+  createButtonText?: string | React.ReactNode;
   loading?: boolean;
   searchQuery?: string;
   onSearchChange?: (value: string) => void;
@@ -50,6 +52,9 @@ interface DataTableProps<TData, TValue> {
   totalRows?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
+  onFilterChange?: (filters: Filter) => void;
+  disabled?: boolean;
+  isAdmin?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -67,7 +72,12 @@ export function DataTable<TData, TValue>({
   totalRows = 0,
   onPageChange,
   onPageSizeChange,
+  onFilterChange,
+  disabled,
+  isAdmin,
 }: DataTableProps<TData, TValue>) {
+  const mounted = useMounted();
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -116,10 +126,16 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
             disabled={loading}
           />
-          <FilterDrawer />
-          {onCreateClick && (
-            <Button onClick={onCreateClick} className="gap-2">
-              <Plus className="h-4 w-4" />
+          {onFilterChange && <FilterDrawer onFilterChange={onFilterChange} />}
+          {mounted && onCreateClick && isAdmin && (
+            <Button
+              onClick={onCreateClick}
+              disabled={disabled}
+              className="gap-2"
+            >
+              {typeof createButtonText !== "string" ? null : (
+                <Plus className="h-4 w-4" />
+              )}
               {createButtonText}
             </Button>
           )}

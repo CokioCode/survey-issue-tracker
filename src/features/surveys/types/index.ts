@@ -72,7 +72,7 @@ export const projectIssueEnum = z.enum([
   "HOLD_BY_PED",
 ]);
 
-const statusJtEnum = [
+export const statusJtEnum = [
   "APPROVE",
   "NOT_APPROVE",
   "DROP_BY_AM",
@@ -89,10 +89,7 @@ const statusJtEnum = [
 export const filterSchema = z.object({
   statusJt: z.enum(statusJtEnum),
   rabHild: z.string().optional(),
-  tahun: z
-    .string()
-    .regex(/^\d{4}$/)
-    .optional(),
+  tahun: z.string().optional().nullable(),
   sto: z.string().optional(),
 });
 

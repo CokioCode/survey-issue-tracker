@@ -4,7 +4,7 @@ export function SectionCards() {
   return (
     <div className="grid gap-4 px-4 lg:px-6 md:grid-cols-2 lg:grid-cols-4">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium">Total Surveys</CardTitle>
         </CardHeader>
         <CardContent>
@@ -15,7 +15,7 @@ export function SectionCards() {
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium">Active Issues</CardTitle>
         </CardHeader>
         <CardContent>
@@ -26,7 +26,7 @@ export function SectionCards() {
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium">Responses</CardTitle>
         </CardHeader>
         <CardContent>
@@ -35,7 +35,7 @@ export function SectionCards() {
         </CardContent>
       </Card>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
         </CardHeader>
         <CardContent>

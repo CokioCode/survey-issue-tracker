@@ -9,17 +9,45 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getRelativeTime } from "@/lib/utils";
 import type { User } from "../types";
 
 const getRoleBadgeVariant = (role: string) => {
-  return role === "ADMIN" ? "default" : "secondary";
+  const variants = {
+    ADMIN: "default" as const,
+    USER: "secondary" as const,
+    EDITOR: "outline" as const,
+    VIEWER: "outline" as const,
+  };
+  return variants[role as keyof typeof variants] || "secondary";
 };
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string | null) => {
+  if (!dateString) return "-";
+
   const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) return "-";
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+};
+
+const formatDateShort = (dateString: string | null) => {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return "-";
+
   return new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",
     month: "short",
@@ -30,6 +58,8 @@ const formatDate = (dateString: string) => {
 interface ColumnActions {
   onEdit?: (user: User) => void;
   onDelete?: (user: User) => void;
+  onView?: (user: User) => void;
+  isAdmin?: boolean;
 }
 
 export const createUserColumns = (
@@ -60,25 +90,22 @@ export const createUserColumns = (
     ),
     enableSorting: false,
     enableHiding: false,
+    size: 40,
   },
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => {
-      return (
-        <div className="flex flex-col">
-          <div className="font-medium text-slate-900">{row.original.name}</div>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "username",
-    header: "Username",
     cell: ({ row }) => (
-      <div className="text-slate-700">{row.original.username}</div>
+      <div className="min-w-[150px]">
+        <div className="font-medium text-slate-900">{row.original.name}</div>
+
+        <div className="text-xs text-slate-500 mt-1">
+          @{row.original.username}
+        </div>
+      </div>
     ),
+    enableHiding: false,
+    size: 180,
   },
   {
     accessorKey: "role",
@@ -91,53 +118,84 @@ export const createUserColumns = (
         {row.original.role}
       </Badge>
     ),
+    size: 100,
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: "Joined",
     cell: ({ row }) => (
-      <div className="text-sm text-slate-600">
-        {formatDate(row.original.createdAt)}
+      <div className="min-w-[100px]">
+        <div className="text-sm text-slate-900">
+          {formatDateShort(row.original.createdAt)}
+        </div>
+        <div className="text-xs text-slate-500 mt-1">
+          {getRelativeTime(row.original.createdAt)}
+        </div>
       </div>
     ),
+    size: 140,
   },
   {
     accessorKey: "updatedAt",
-    header: "Last Updated",
+    header: "Last Active",
     cell: ({ row }) => (
-      <div className="text-sm text-slate-600">
+      <div className="text-sm text-slate-600 min-w-[120px]">
         {formatDate(row.original.updatedAt)}
       </div>
     ),
+    size: 160,
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onClick={() => actions?.onEdit?.(row.original)}>
-            Edit User
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => actions?.onDelete?.(row.original)}
-          >
-            Delete User
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    header: "",
+    cell: ({ row }) => {
+      const isAdmin = actions?.isAdmin ?? true;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[160px]">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            {actions?.onView && (
+              <DropdownMenuItem onClick={() => actions.onView?.(row.original)}>
+                View Details
+              </DropdownMenuItem>
+            )}
+
+            {isAdmin && actions?.onEdit && (
+              <DropdownMenuItem onClick={() => actions.onEdit?.(row.original)}>
+                Edit User
+              </DropdownMenuItem>
+            )}
+
+            {isAdmin && actions?.onDelete && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => actions.onDelete?.(row.original)}
+                >
+                  Delete User
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    size: 60,
+    enableHiding: false,
   },
 ];
 

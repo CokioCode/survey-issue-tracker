@@ -1,6 +1,5 @@
 "use client";
 
-import { type JwtPayload, jwtDecode } from "jwt-decode";
 import type * as React from "react";
 import { NavMain } from "@/components/layout/NavMain";
 import { NavUser } from "@/components/layout/NavUser";
@@ -14,17 +13,22 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { sidebarData } from "@/features/dashboard/data/sidebar-data";
+import { useMounted } from "@/hooks/useMounted";
 import { decodeJwt, getCookie } from "@/lib/utils";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const token = getCookie("token");
-  const decoded = decodeJwt<{
-    userId: string;
-    username: string;
-    role: "ADMIN" | "USER";
-    iat: number;
-    exp: number;
-  }>(token);
+  const mounted = useMounted();
+
+  const token = mounted ? getCookie("token") : null;
+  const decoded = token
+    ? decodeJwt<{
+        userId: string;
+        username: string;
+        role: "ADMIN" | "USER";
+        iat: number;
+        exp: number;
+      }>(token)
+    : null;
 
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
@@ -38,7 +42,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Survey Tracker</span>
-                  <span className="truncate text-xs">Admin Panel</span>
+                  <span className="truncate text-xs">
+                    {/* ✅ No hydration error - shows same content during SSR and first client render */}
+                    {!mounted || !decoded
+                      ? "Panel"
+                      : decoded.role === "ADMIN"
+                        ? "Admin Panel"
+                        : "User Panel"}
+                  </span>
                 </div>
               </div>
             </SidebarMenuButton>

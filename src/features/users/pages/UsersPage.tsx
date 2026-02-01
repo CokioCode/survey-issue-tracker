@@ -101,6 +101,7 @@ export const UsersPage = () => {
         totalRows={data?.data?.length ?? 0}
         onPageChange={pagination.handlePageChange}
         onPageSizeChange={pagination.handlePageSizeChange}
+        isAdmin={true}
       />
 
       <UserDialog

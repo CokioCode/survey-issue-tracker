@@ -28,20 +28,6 @@ const getStatusUsulanBadgeVariant = (status: string | null) => {
   }
 };
 
-const getStatusIhldBadgeVariant = (status: string | null) => {
-  if (!status) return "outline";
-  switch (status) {
-    case "Active":
-      return "default";
-    case "Canceled":
-      return "destructive";
-    case "Pending":
-      return "secondary";
-    default:
-      return "outline";
-  }
-};
-
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "-";
   const date = new Date(dateString);
@@ -65,6 +51,7 @@ interface ColumnActions {
   onEdit?: (survey: Survey) => void;
   onDelete?: (survey: Survey) => void;
   onView?: (survey: Survey) => void;
+  isAdmin?: boolean;
 }
 
 export const createSurveyColumns = (
@@ -95,6 +82,7 @@ export const createSurveyColumns = (
     ),
     enableSorting: false,
     enableHiding: false,
+    size: 40,
   },
   {
     accessorKey: "no",
@@ -103,22 +91,50 @@ export const createSurveyColumns = (
       <div className="font-medium text-slate-900">{row.original.no}</div>
     ),
     enableHiding: false,
-  },
-  {
-    accessorKey: "idKendala",
-    header: "ID Kendala",
-    cell: ({ row }) => (
-      <div className="text-slate-700">{row.original.idKendala || "-"}</div>
-    ),
+    size: 50,
   },
   {
     accessorKey: "namaPelanggan",
-    header: "Nama Pelanggan",
+    header: "Pelanggan",
     cell: ({ row }) => (
-      <div className="font-medium text-slate-900">
-        {row.original.namaPelanggan || "-"}
+      <div className="min-w-[200px]">
+        <div className="font-medium text-slate-900">
+          {row.original.namaPelanggan || "-"}
+        </div>
+        <div className="text-xs text-slate-500 mt-1">
+          ID: {row.original.idKendala || "-"}
+        </div>
       </div>
     ),
+    size: 220,
+  },
+  {
+    accessorKey: "lokasi",
+    header: "Lokasi",
+    cell: ({ row }) => (
+      <div className="min-w-[120px]">
+        <div className="text-sm text-slate-900">
+          {row.original.datel || "-"}
+        </div>
+        <div className="text-xs text-slate-500 mt-1">
+          STO: {row.original.sto || "-"}
+        </div>
+      </div>
+    ),
+    size: 140,
+  },
+  {
+    accessorKey: "statusUsulan",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge
+        variant={getStatusUsulanBadgeVariant(row.original.statusUsulan)}
+        className="font-medium"
+      >
+        {row.original.statusUsulan?.replace("_", " ") || "-"}
+      </Badge>
+    ),
+    size: 120,
   },
   {
     accessorKey: "jenisOrder",
@@ -128,119 +144,74 @@ export const createSurveyColumns = (
         {row.original.jenisOrder || "-"}
       </Badge>
     ),
-  },
-  {
-    accessorKey: "datel",
-    header: "Datel",
-    cell: ({ row }) => (
-      <div className="text-slate-700">{row.original.datel || "-"}</div>
-    ),
-  },
-  {
-    accessorKey: "sto",
-    header: "STO",
-    cell: ({ row }) => (
-      <div className="text-slate-700">{row.original.sto || "-"}</div>
-    ),
-  },
-  {
-    accessorKey: "statusUsulan",
-    header: "Status Usulan",
-    cell: ({ row }) => (
-      <Badge
-        variant={getStatusUsulanBadgeVariant(row.original.statusUsulan)}
-        className="font-medium"
-      >
-        {row.original.statusUsulan?.replace("_", " ") || "-"}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: "statusIhld",
-    header: "Status IHLD",
-    cell: ({ row }) => (
-      <Badge
-        variant={getStatusIhldBadgeVariant(row.original.statusIhld)}
-        className="font-medium"
-      >
-        {row.original.statusIhld || "-"}
-      </Badge>
-    ),
+    size: 120,
   },
   {
     accessorKey: "rabHldSummary",
     header: "RAB HLD",
     cell: ({ row }) => (
-      <div className="text-sm text-slate-700">
+      <div className="text-sm font-medium text-slate-900 min-w-[110px]">
         {formatCurrency(row.original.rabHldSummary)}
       </div>
     ),
-  },
-  {
-    accessorKey: "ihld",
-    header: "IHLD",
-    cell: ({ row }) => (
-      <div className="text-sm text-slate-700">
-        {formatCurrency(row.original.ihld)}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "c2r",
-    header: "C2R",
-    cell: ({ row }) => (
-      <div className="text-sm text-slate-700">{row.original.c2r || "-"}</div>
-    ),
+    size: 130,
   },
   {
     accessorKey: "tglInput",
     header: "Tanggal Input",
     cell: ({ row }) => (
-      <div className="text-sm text-slate-600">
+      <div className="text-sm text-slate-600 min-w-[100px]">
         {formatDate(row.original.tglInput)}
       </div>
     ),
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    cell: ({ row }) => (
-      <div className="text-sm text-slate-600">
-        {formatDate(row.original.createdAt)}
-      </div>
-    ),
+    size: 120,
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onClick={() => actions?.onView?.(row.original)}>
-            View Details
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => actions?.onEdit?.(row.original)}>
-            Edit Survey
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => actions?.onDelete?.(row.original)}
-          >
-            Delete Survey
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    header: "",
+    cell: ({ row }) => {
+      const isAdmin = actions?.isAdmin ?? false;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuItem onClick={() => actions?.onView?.(row.original)}>
+              View Details
+            </DropdownMenuItem>
+
+            {isAdmin && (
+              <DropdownMenuItem onClick={() => actions?.onEdit?.(row.original)}>
+                Edit Survey
+              </DropdownMenuItem>
+            )}
+
+            {isAdmin && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => actions?.onDelete?.(row.original)}
+                >
+                  Delete Survey
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    size: 60,
+    enableHiding: false,
   },
 ];
 

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   type CreateUser,
   createUserSchema,
@@ -105,44 +106,55 @@ export const UserDialog = ({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
-              name="name"
-              label="Full Name"
-              placeholder="John Doe"
-            />
+            <Tabs defaultValue="basic" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                <TabsTrigger value="security">Security</TabsTrigger>
+              </TabsList>
 
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
-              name="username"
-              label="Username"
-              placeholder="johndoe"
-            />
+              <TabsContent value="basic" className="space-y-4 mt-2">
+                <CustomFormField
+                  fieldType={FormFieldType.INPUT}
+                  control={form.control}
+                  name="name"
+                  label="Full Name"
+                  placeholder="John Doe"
+                />
 
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              control={form.control}
-              name="password"
-              label="Password"
-              placeholder={
-                isEditMode
-                  ? "Leave empty to keep current password"
-                  : "Enter password"
-              }
-            />
+                <CustomFormField
+                  fieldType={FormFieldType.INPUT}
+                  control={form.control}
+                  name="username"
+                  label="Username"
+                  placeholder="johndoe"
+                />
+              </TabsContent>
 
-            <CustomFormField
-              fieldType={FormFieldType.SELECT}
-              control={form.control}
-              name="role"
-              label="Role"
-              placeholder="Select a role"
-            >
-              <SelectItem value="USER">User</SelectItem>
-              <SelectItem value="ADMIN">Admin</SelectItem>
-            </CustomFormField>
+              <TabsContent value="security" className="space-y-4 mt-6">
+                <CustomFormField
+                  fieldType={FormFieldType.INPUT}
+                  control={form.control}
+                  name="password"
+                  label="Password"
+                  placeholder={
+                    isEditMode
+                      ? "Leave empty to keep current password"
+                      : "Enter password"
+                  }
+                />
+
+                <CustomFormField
+                  fieldType={FormFieldType.SELECT}
+                  control={form.control}
+                  name="role"
+                  label="Role"
+                  placeholder="Select a role"
+                >
+                  <SelectItem value="USER">User</SelectItem>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                </CustomFormField>
+              </TabsContent>
+            </Tabs>
 
             <DialogFooter>
               <SubmitButton isLoading={form.formState.isSubmitting}>
