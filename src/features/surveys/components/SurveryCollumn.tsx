@@ -12,21 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getStatusJtBadgeVariant } from "@/lib/utils";
 import type { Survey } from "../types";
-
-const getStatusUsulanBadgeVariant = (status: string | null) => {
-  if (!status) return "outline";
-  switch (status) {
-    case "APPROVED":
-      return "default";
-    case "NOT_APPROVED":
-      return "destructive";
-    case "PENDING":
-      return "secondary";
-    default:
-      return "outline";
-  }
-};
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "-";
@@ -124,14 +111,14 @@ export const createSurveyColumns = (
     size: 140,
   },
   {
-    accessorKey: "statusUsulan",
+    accessorKey: "statusJt",
     header: "Status",
     cell: ({ row }) => (
       <Badge
-        variant={getStatusUsulanBadgeVariant(row.original.statusUsulan)}
+        variant={getStatusJtBadgeVariant(row.original.statusJt)}
         className="font-medium"
       >
-        {row.original.statusUsulan?.replace("_", " ") || "-"}
+        {row.original.statusJt?.replace("_", " ") || "-"}
       </Badge>
     ),
     size: 120,

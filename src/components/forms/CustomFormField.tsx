@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type React from "react";
+import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import type { Control } from "react-hook-form";
 import {
@@ -12,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "../ui/checkbox";
+import { DualRangeSlider } from "../ui/dual-range-slider";
 import {
   Select,
   SelectContent,
@@ -28,6 +30,7 @@ export enum FormFieldType {
   DATE_PICKER = "datePicker",
   SELECT = "select",
   SKELETON = "skeleton",
+  RANGE_SLIDER = "rangeSlider",
 }
 
 interface CustomProps {
@@ -44,6 +47,11 @@ interface CustomProps {
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
   type?: React.InputHTMLAttributes<HTMLInputElement>["type"];
+
+  min?: number;
+  max?: number;
+  step?: number;
+  formatLabel?: (value: number | undefined) => string;
 }
 
 type RenderInputProps = {
@@ -53,6 +61,8 @@ type RenderInputProps = {
 };
 
 const RenderInput = ({ field, props, type }: RenderInputProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -79,7 +89,7 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
 
     case FormFieldType.PASSWORD:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="relative flex rounded-md border border-dark-500 bg-dark-400">
           {props.iconSrc && (
             <Image
               src={props.iconSrc}
@@ -91,12 +101,24 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
           )}
           <FormControl>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder={props.placeholder}
               {...field}
-              className="shad-input border-0"
+              className="shad-input border-0 pr-10"
             />
           </FormControl>
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+          >
+            <Image
+              src={showPassword ? "/icons/eye-off.svg" : "/icons/eye.svg"}
+              height={20}
+              width={20}
+              alt={showPassword ? "Hide password" : "Show password"}
+            />
+          </button>
         </div>
       );
 
@@ -127,6 +149,7 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
           </div>
         </FormControl>
       );
+
     case FormFieldType.DATE_PICKER:
       return (
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
@@ -149,6 +172,7 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
           </FormControl>
         </div>
       );
+
     case FormFieldType.SELECT:
       return (
         <FormControl>
@@ -165,6 +189,24 @@ const RenderInput = ({ field, props, type }: RenderInputProps) => {
               {props.children}
             </SelectContent>
           </Select>
+        </FormControl>
+      );
+
+    case FormFieldType.RANGE_SLIDER:
+      return (
+        <FormControl>
+          <div className="pt-6 pb-2">
+            <DualRangeSlider
+              value={field.value || [props.min || 0, props.max || 100]}
+              onValueChange={field.onChange}
+              min={props.min || 0}
+              max={props.max || 100}
+              step={props.step || 1}
+              label={props.formatLabel}
+              labelPosition="top"
+              className="w-full"
+            />
+          </div>
         </FormControl>
       );
 

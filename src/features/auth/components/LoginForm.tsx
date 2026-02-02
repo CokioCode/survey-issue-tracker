@@ -44,15 +44,16 @@ export const LoginForm = ({
 
           <CustomFormField
             control={form.control}
-            fieldType={FormFieldType.INPUT}
+            fieldType={FormFieldType.PASSWORD}
             name="password"
             label="Password"
             placeholder="********"
-            type="password"
             iconSrc="/icons/lock.svg"
           />
 
-          <SubmitButton isLoading={isLoading}>Login</SubmitButton>
+          <SubmitButton isValid={form.formState.isValid} isLoading={isLoading}>
+            Login
+          </SubmitButton>
 
           <Field>
             <FieldDescription className="text-center">

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FilterIcon, X } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   CustomFormField,
@@ -18,7 +19,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Form } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { SelectItem } from "@/components/ui/select";
+import { formatCurrency, RAB_RANGES } from "@/lib/utils";
 import { type Filter, filterSchema, statusJtEnum } from "../types";
 
 interface FilterDrawerProps {
@@ -27,12 +30,15 @@ interface FilterDrawerProps {
 
 export const FilterDrawer = (props: FilterDrawerProps) => {
   const { onFilterChange } = props;
+  const [selectedRange, setSelectedRange] = useState<number | null>(null);
+  const [showCustomRange, setShowCustomRange] = useState(false);
 
   const form = useForm<Filter>({
     resolver: zodResolver(filterSchema),
     mode: "onChange",
     defaultValues: {
-      rabHild: "",
+      rabHldMin: "",
+      rabHldMax: "",
       statusJt: "APPROVE",
       sto: "",
       tahun: "",
@@ -45,14 +51,31 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
 
   const handleReset = () => {
     const emptyFilter: Filter = {
-      rabHild: "",
+      rabHldMin: "",
+      rabHldMax: "",
       statusJt: "APPROVE",
       sto: "",
       tahun: "",
     };
 
     form.reset(emptyFilter);
+    setSelectedRange(null);
+    setShowCustomRange(false);
     onFilterChange?.(emptyFilter);
+  };
+
+  const handlePresetRange = (index: number) => {
+    const range = RAB_RANGES[index];
+    setSelectedRange(index);
+    setShowCustomRange(false);
+
+    form.setValue("rabHldMin", range.min.toString());
+    form.setValue("rabHldMax", range.max.toString());
+  };
+
+  const handleCustomRange = () => {
+    setSelectedRange(null);
+    setShowCustomRange(true);
   };
 
   return (
@@ -63,7 +86,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="fixed bottom-0 right-0 left-auto mt-0 w-full sm:w-[400px] rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none h-[85vh] sm:h-full">
+      <DrawerContent className="fixed bottom-0 right-0 left-auto mt-0 w-full sm:w-[450px] rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none h-[85vh] sm:h-full">
         <DrawerHeader className="border-b pb-4">
           <div className="flex items-center justify-between">
             <div>
@@ -71,7 +94,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
                 Filter Survey
               </DrawerTitle>
               <DrawerDescription className="mt-1 text-sm text-muted-foreground">
-                Filter surveys berdasarkan status, region, dan tahun
+                Filter surveys berdasarkan status, budget, dan region
               </DrawerDescription>
             </div>
             <DrawerClose asChild>
@@ -86,7 +109,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(submitForm)}
-              className="space-y-5"
+              className="space-y-6"
               id="filter-form"
             >
               <CustomFormField
@@ -103,13 +126,70 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
                 ))}
               </CustomFormField>
 
-              <CustomFormField
-                control={form.control}
-                name="rabHild"
-                fieldType={FormFieldType.INPUT}
-                label="RAB HILD"
-                placeholder="Masukkan RAB HILD"
-              />
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">RAB HILD Range</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {RAB_RANGES.map((range, index) => (
+                    <Button
+                      key={range.label}
+                      type="button"
+                      variant={selectedRange === index ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePresetRange(index)}
+                      className="text-xs"
+                    >
+                      {range.label}
+                    </Button>
+                  ))}
+                </div>
+
+                <Button
+                  type="button"
+                  variant={showCustomRange ? "default" : "outline"}
+                  size="sm"
+                  onClick={handleCustomRange}
+                  className="w-full text-xs"
+                >
+                  Custom Range
+                </Button>
+
+                {showCustomRange && (
+                  <div className="space-y-3 pt-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <CustomFormField
+                        control={form.control}
+                        name="rabHldMin"
+                        fieldType={FormFieldType.INPUT}
+                        label="Min (Rp)"
+                        placeholder="0"
+                        type="number"
+                      />
+                      <CustomFormField
+                        control={form.control}
+                        name="rabHldMax"
+                        fieldType={FormFieldType.INPUT}
+                        label="Max (Rp)"
+                        placeholder="1000000000"
+                        type="number"
+                      />
+                    </div>
+
+                    {form.watch("rabHldMin") && form.watch("rabHldMax") && (
+                      <div className="text-xs text-muted-foreground text-center p-2 bg-muted rounded">
+                        {formatCurrency(Number(form.watch("rabHldMin")))} -{" "}
+                        {formatCurrency(Number(form.watch("rabHldMax")))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {selectedRange !== null && !showCustomRange && (
+                  <div className="text-xs text-muted-foreground text-center p-2 bg-muted rounded">
+                    {formatCurrency(RAB_RANGES[selectedRange].min)} -{" "}
+                    {formatCurrency(RAB_RANGES[selectedRange].max)}
+                  </div>
+                )}
+              </div>
 
               <CustomFormField
                 control={form.control}
@@ -134,6 +214,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
           <SubmitButton
             form="filter-form"
             isLoading={form.formState.isSubmitting}
+            isValid={form.formState.isValid}
             className="w-full"
           >
             Terapkan Filter

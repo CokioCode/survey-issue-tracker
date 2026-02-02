@@ -18,6 +18,7 @@ export const userSchema = z.object({
     .trim(),
 
   role: roleEnum,
+  lastLoginAt: z.iso.datetime(),
 
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
@@ -27,15 +28,31 @@ export const createUserSchema = userSchema
   .omit({
     id: true,
     createdAt: true,
+    lastLoginAt: true,
     updatedAt: true,
   })
   .extend({
     password: z.string().min(3, "Password minimal 3 karakter").max(100),
   });
 
-export const updateUserSchema = createUserSchema.partial().extend({
-  password: z.string().min(3, "Password minimal 3 karakter").optional(),
-});
+export const updateUserSchema = userSchema
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+    lastLoginAt: true,
+  })
+  .extend({
+    oldPassword: z
+      .string()
+      .min(3, "Old password minimal 3 karakter")
+      .optional(),
+    newPassword: z
+      .string()
+      .min(3, "New password minimal 3 karakter")
+      .optional(),
+  })
+  .partial();
 
 export type User = z.infer<typeof userSchema>;
 export type CreateUser = z.infer<typeof createUserSchema>;

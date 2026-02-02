@@ -19,7 +19,13 @@ import { Form } from "@/components/ui/form";
 import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { type Survey, type UpdateSurvey, updateSurveySchema } from "../types";
+import { getStatusJtBadgeVariant } from "@/lib/utils";
+import {
+  type Survey,
+  statusJtEnum,
+  type UpdateSurvey,
+  updateSurveySchema,
+} from "../types";
 
 interface SurveyDialogProps {
   isOpen: boolean;
@@ -77,11 +83,11 @@ export const SurveyDialog = ({
         ...data,
         c2r: Number(data.c2r),
         jarakOdp: Number(data.jarakOdp),
+        rabSurvey: Number(data.rabSurvey),
       };
 
       await onSubmit(submitData);
       form.reset();
-      onOpenChange(false);
     } catch (error) {
       console.error("Error updating survey:", error);
     }
@@ -118,9 +124,11 @@ export const SurveyDialog = ({
                   label="Status JT"
                   placeholder="Pilih status"
                 >
-                  <SelectItem value="APPROVE">Approve</SelectItem>
-                  <SelectItem value="NOT_APPROVE">Not Approve</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
+                  {statusJtEnum.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status.replaceAll("_", " ")}
+                    </SelectItem>
+                  ))}
                 </CustomFormField>
 
                 <CustomFormField
@@ -231,7 +239,10 @@ export const SurveyDialog = ({
             </Tabs>
 
             <DialogFooter className="gap-2">
-              <SubmitButton isLoading={form.formState.isSubmitting}>
+              <SubmitButton
+                isValid={form.formState.isValid}
+                isLoading={form.formState.isSubmitting}
+              >
                 Update Survey
               </SubmitButton>
             </DialogFooter>
@@ -280,22 +291,6 @@ const formatDate = (dateString: string | null | undefined) => {
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
-};
-
-const getStatusBadgeVariant = (status: string | null) => {
-  if (!status) return "outline";
-  switch (status) {
-    case "APPROVED":
-    case "APPROVE":
-      return "default";
-    case "NOT_APPROVED":
-    case "NOT_APPROVE":
-      return "destructive";
-    case "PENDING":
-      return "secondary";
-    default:
-      return "outline";
-  }
 };
 
 export const SurveyDetailDialog = ({
@@ -359,7 +354,7 @@ export const SurveyDetailDialog = ({
                 </dt>
                 <dd className="col-span-2">
                   <Badge
-                    variant={getStatusBadgeVariant(survey.statusJt)}
+                    variant={getStatusJtBadgeVariant(survey.statusJt)}
                     className="font-medium"
                   >
                     {survey.statusJt?.replace("_", " ") || "-"}
@@ -372,7 +367,7 @@ export const SurveyDetailDialog = ({
                 </dt>
                 <dd className="col-span-2">
                   <Badge
-                    variant={getStatusBadgeVariant(survey.statusUsulan)}
+                    variant={getStatusJtBadgeVariant(survey.statusUsulan)}
                     className="font-medium"
                   >
                     {survey.statusUsulan?.replace("_", " ") || "-"}

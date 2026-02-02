@@ -2,6 +2,7 @@
 
 import { ChevronsUpDown, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -45,6 +46,7 @@ export function NavUser() {
       isAuth: true,
       invalidateQueries: [["me"]],
       onSuccess: (res) => {
+        toast.success(res.message);
         removeCookie("token");
         router.replace("/login");
       },

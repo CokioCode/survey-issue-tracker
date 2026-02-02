@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { DeleteDialog } from "@/components/dialog/DeleteDialog";
 import { DataTable } from "@/components/table/DataTable";
 import { createUserColumns } from "@/features/users/components/UserColumns";
@@ -8,6 +9,7 @@ import { UserDialog } from "@/features/users/components/UserDialog";
 import type { CreateUser, UpdateUser, User } from "@/features/users/types";
 import { useDelete, useGet, usePost, usePut } from "@/hooks/useApi";
 import { useTablePagination } from "@/hooks/useTablePagination";
+import { getErrorMessage } from "@/lib/utils";
 import type { ApiResponse } from "@/types";
 
 export const UsersPage = () => {
@@ -20,7 +22,7 @@ export const UsersPage = () => {
   const { data, isLoading } = useGet<{
     success: boolean;
     message: string;
-    meta: { page: number; limit: number };
+    meta: { page: number; limit: number; total: number };
     data: User[];
   }>(
     ["users", pagination.page, pagination.pageSize, pagination.searchQuery],
@@ -31,6 +33,10 @@ export const UsersPage = () => {
   const createUserMutation = usePost<ApiResponse<User>, CreateUser>("/users", {
     isAuth: true,
     invalidateQueries: [["users"]],
+    onSuccess: (res) => {
+      toast.success(res.message);
+      handleCloseDialog();
+    },
   });
 
   const updateUserMutation = usePut<ApiResponse<User>, UpdateUser>(
@@ -38,6 +44,10 @@ export const UsersPage = () => {
     {
       isAuth: true,
       invalidateQueries: [["users"]],
+      onSuccess: (res) => {
+        toast.success(res.message);
+        handleCloseDialog();
+      },
     },
   );
 
@@ -46,16 +56,22 @@ export const UsersPage = () => {
     {
       isAuth: true,
       invalidateQueries: [["users"]],
+      onSuccess: (res) => {
+        toast.success(res.message);
+      },
     },
   );
 
   const handleSubmitUser = async (values: CreateUser | UpdateUser) => {
-    if (selectedUser) {
-      await updateUserMutation.mutateAsync(values as UpdateUser);
-    } else {
-      await createUserMutation.mutateAsync(values as CreateUser);
+    try {
+      if (selectedUser) {
+        await updateUserMutation.mutateAsync(values as UpdateUser);
+      } else {
+        await createUserMutation.mutateAsync(values as CreateUser);
+      }
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Failed to save user"));
     }
-    handleCloseDialog();
   };
 
   const handleOpenDialog = (user?: User) => {
@@ -98,7 +114,7 @@ export const UsersPage = () => {
         onSearchChange={pagination.handleSearch}
         page={pagination.page}
         pageSize={pagination.pageSize}
-        totalRows={data?.data?.length ?? 0}
+        totalRows={data?.meta.total ?? 0}
         onPageChange={pagination.handlePageChange}
         onPageSizeChange={pagination.handlePageSizeChange}
         isAdmin={true}

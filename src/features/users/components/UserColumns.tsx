@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -20,8 +19,6 @@ const getRoleBadgeVariant = (role: string) => {
   const variants = {
     ADMIN: "default" as const,
     USER: "secondary" as const,
-    EDITOR: "outline" as const,
-    VIEWER: "outline" as const,
   };
   return variants[role as keyof typeof variants] || "secondary";
 };
@@ -136,11 +133,11 @@ export const createUserColumns = (
     size: 140,
   },
   {
-    accessorKey: "updatedAt",
+    accessorKey: "lastLoginAt",
     header: "Last Active",
     cell: ({ row }) => (
       <div className="text-sm text-slate-600 min-w-[120px]">
-        {formatDate(row.original.updatedAt)}
+        {formatDate(row.original.lastLoginAt)}
       </div>
     ),
     size: 160,
@@ -164,9 +161,6 @@ export const createUserColumns = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-
             {actions?.onView && (
               <DropdownMenuItem onClick={() => actions.onView?.(row.original)}>
                 View Details

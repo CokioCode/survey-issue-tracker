@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type { z } from "zod";
 import { FeatureItem } from "@/components/forms/FeatureItem";
 import { LoginForm } from "@/features/auth/components/LoginForm";
@@ -45,6 +46,8 @@ export const LoginPage = (props: LoginPageProps) => {
     isAuth: false,
     invalidateQueries: [["users"]],
     onSuccess: (response) => {
+      toast.success(response.message);
+
       if (response.data?.token) {
         setCookie("token", response.data.token);
       }
@@ -55,10 +58,19 @@ export const LoginPage = (props: LoginPageProps) => {
           : "/admin/dashboard";
       router.replace(dashboardPath);
     },
+
+    onError: (res) => {
+      toast.error(
+        (res.response?.data as { message?: string })?.message ||
+          "An error occurred",
+      );
+    },
   });
 
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
-    await loginAction.mutateAsync(values);
+    try {
+      await loginAction.mutateAsync(values);
+    } catch {}
   };
 
   return (

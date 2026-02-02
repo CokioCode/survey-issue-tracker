@@ -88,7 +88,8 @@ export const statusJtEnum = [
 
 export const filterSchema = z.object({
   statusJt: z.enum(statusJtEnum),
-  rabHild: z.string().optional(),
+  rabHldMin: z.string().optional(),
+  rabHldMax: z.string().optional(),
   tahun: z.string().optional().nullable(),
   sto: z.string().optional(),
 });
@@ -99,7 +100,7 @@ export const surveySchema = z.object({
   id: z.uuid(),
   no: z.string(),
   bln: z.string(),
-  tglInput: z.string().datetime(),
+  tglInput: z.iso.datetime(),
   idKendala: z.string(),
   jenisOrder: z.string(),
   datel: z.string(),
@@ -117,7 +118,7 @@ export const surveySchema = z.object({
   statusInstalasi: z.string().nullable(),
   keterangan: z.string().nullable(),
   newSc: z.string(),
-  statusJt: z.enum(["APPROVE", "NOT_APPROVE"]),
+  statusJt: z.enum(statusJtEnum),
   c2r: z.number(),
   nomorNcx: z.string(),
   alamat: z.string(),

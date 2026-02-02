@@ -53,3 +53,74 @@ export function getRelativeTime(dateString: string | null): string {
     return `${Math.floor(diffInSeconds / 604800)}w ago`;
   return `${Math.floor(diffInSeconds / 2592000)}mo ago`;
 }
+
+export function formatCurrency(value: number): string {
+  if (value >= 1000000000) {
+    return `Rp ${(value / 1000000000).toFixed(1)}M`;
+  }
+  if (value >= 1000000) {
+    return `Rp ${(value / 1000000).toFixed(0)}Jt`;
+  }
+  return `Rp ${value.toLocaleString("id-ID")}`;
+}
+
+export function parseCurrency(value: string): number {
+  return Number(value.replace(/[Rp\s.]/g, ""));
+}
+
+export const RAB_RANGES = [
+  { label: "< 10 Jt", min: 0, max: 10000000 },
+  { label: "10 - 50 Jt", min: 10000000, max: 50000000 },
+  { label: "50 - 100 Jt", min: 50000000, max: 100000000 },
+  { label: "> 100 Jt", min: 100000000, max: 1000000000 },
+] as const;
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
+export function getErrorMessage(
+  error: unknown,
+  fallback = "An error occurred",
+): string {
+  if (!error) return fallback;
+
+  const apiError = error as ApiError;
+
+  if (apiError.response?.data?.message) {
+    return apiError.response.data.message;
+  }
+
+  if (apiError.message) {
+    return apiError.message;
+  }
+
+  return fallback;
+}
+export function getStatusJtBadgeVariant(status: string | null) {
+  if (!status) return "outline";
+  switch (status) {
+    case "APPROVE":
+    case "APPROVED":
+      return "default";
+    case "NOT_APPROVE":
+    case "DROP_BY_AM":
+    case "DROP_BY_WITEL":
+    case "REVENUE_KURANG":
+    case "AKI_TIDAK_LAYAK":
+    case "CANCEL_PELANGGAN":
+      return "destructive";
+    case "NJKI_BELUM_LENGKAP":
+    case "AANWIJZING":
+    case "TUNGGU_JPP":
+    case "INPUT_PAKET_LAIN":
+      return "secondary";
+    default:
+      return "outline";
+  }
+}

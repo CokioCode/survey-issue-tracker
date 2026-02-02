@@ -1,13 +1,7 @@
-import { ChartAreaInteractive } from "@/components/charts/ChartAreaInteractive";
-import { SectionCards } from "@/features/dashboard/components/SectionCards";
+import { DashboardPage } from "@/features/dashboard/pages/DashboardPage";
 
-export default function Page() {
-  return (
-    <>
-      <SectionCards />
-      <div className="px-4 lg:px-6">
-        <ChartAreaInteractive />
-      </div>
-    </>
-  );
-}
+const page = () => {
+  return <DashboardPage />;
+};
+
+export default page;

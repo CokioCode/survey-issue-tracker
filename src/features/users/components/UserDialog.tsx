@@ -44,12 +44,21 @@ export const UserDialog = ({
 
   const form = useForm<CreateUser | UpdateUser>({
     resolver: zodResolver(isEditMode ? updateUserSchema : createUserSchema),
-    defaultValues: {
-      name: "",
-      username: "",
-      password: "",
-      role: "USER",
-    },
+    mode: "onChange",
+    defaultValues: isEditMode
+      ? {
+          name: "",
+          username: "",
+          role: "USER",
+          oldPassword: "",
+          newPassword: "",
+        }
+      : {
+          name: "",
+          username: "",
+          password: "",
+          role: "USER",
+        },
   });
 
   useEffect(() => {
@@ -58,8 +67,9 @@ export const UserDialog = ({
         form.reset({
           name: user.name,
           username: user.username,
-          password: "",
           role: user.role,
+          oldPassword: "",
+          newPassword: "",
         });
       } else {
         form.reset({
@@ -74,12 +84,8 @@ export const UserDialog = ({
 
   const handleSubmit = async (data: CreateUser | UpdateUser) => {
     try {
-      const submitData =
-        isEditMode && !data.password ? { ...data, password: undefined } : data;
-
-      await onSubmit(submitData);
+      await onSubmit(data);
       form.reset();
-      onOpenChange(false);
     } catch (error) {
       console.error(
         `Error ${isEditMode ? "updating" : "creating"} user:`,
@@ -131,17 +137,33 @@ export const UserDialog = ({
               </TabsContent>
 
               <TabsContent value="security" className="space-y-4 mt-6">
-                <CustomFormField
-                  fieldType={FormFieldType.INPUT}
-                  control={form.control}
-                  name="password"
-                  label="Password"
-                  placeholder={
-                    isEditMode
-                      ? "Leave empty to keep current password"
-                      : "Enter password"
-                  }
-                />
+                {isEditMode ? (
+                  <>
+                    <CustomFormField
+                      fieldType={FormFieldType.PASSWORD}
+                      control={form.control}
+                      name="oldPassword"
+                      label="Current Password"
+                      placeholder="Enter current password"
+                    />
+
+                    <CustomFormField
+                      fieldType={FormFieldType.PASSWORD}
+                      control={form.control}
+                      name="newPassword"
+                      label="New Password"
+                      placeholder="Enter new password"
+                    />
+                  </>
+                ) : (
+                  <CustomFormField
+                    fieldType={FormFieldType.PASSWORD}
+                    control={form.control}
+                    name="password"
+                    label="Password"
+                    placeholder="Enter password"
+                  />
+                )}
 
                 <CustomFormField
                   fieldType={FormFieldType.SELECT}
@@ -157,7 +179,10 @@ export const UserDialog = ({
             </Tabs>
 
             <DialogFooter>
-              <SubmitButton isLoading={form.formState.isSubmitting}>
+              <SubmitButton
+                isValid={form.formState.isValid}
+                isLoading={form.formState.isSubmitting}
+              >
                 {isEditMode ? "Update User" : "Create User"}
               </SubmitButton>
             </DialogFooter>

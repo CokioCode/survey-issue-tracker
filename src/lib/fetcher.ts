@@ -7,7 +7,7 @@ interface FetcherOptions extends Omit<AxiosRequestConfig, "url"> {
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "",
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": true,
@@ -26,10 +26,7 @@ export const serverFetcher = async <T = unknown>(
       ...restOptions,
     };
 
-    // For server-side, we can't access cookies directly
-    // Token should be passed explicitly or retrieved from request headers
     if (isAuth) {
-      // If running on server, token should be passed in options or headers
       if (restOptions.headers?.Authorization) {
         config.headers = {
           ...config.headers,
@@ -73,11 +70,9 @@ export const clientFetcher = async <T = unknown>(
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      // Clear the token cookie on 401 error
       removeCookie("token");
       window.location.href = "/login";
     }
-    console.log(error);
     throw error;
   }
 };

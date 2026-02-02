@@ -2,11 +2,12 @@
 
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { DeleteDialog } from "@/components/dialog/DeleteDialog";
 import { DataTable } from "@/components/table/DataTable";
 import { useDelete, useGet, usePost, usePut } from "@/hooks/useApi";
 import { useTablePagination } from "@/hooks/useTablePagination";
-import { decodeJwt, getCookie } from "@/lib/utils";
+import { decodeJwt, getCookie, getErrorMessage } from "@/lib/utils";
 import type { ApiResponse } from "@/types";
 import { createSurveyColumns } from "../components/SurveryCollumn";
 import { SurveyDetailDialog, SurveyDialog } from "../components/SurveyDialog";
@@ -19,7 +20,8 @@ export const SurveyPage = () => {
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
 
   const [filters, setFilters] = useState<Filter>({
-    rabHild: "",
+    rabHldMin: "",
+    rabHldMax: "",
     statusJt: "APPROVE",
     sto: "",
     tahun: "",
@@ -43,7 +45,8 @@ export const SurveyPage = () => {
     params.append("search", pagination.searchQuery);
 
     if (filters.statusJt) params.append("statusJt", filters.statusJt);
-    if (filters.rabHild) params.append("rabHild", filters.rabHild);
+    if (filters.rabHldMin) params.append("rabHldMin", filters.rabHldMin);
+    if (filters.rabHldMax) params.append("rabHldMax", filters.rabHldMax);
     if (filters.sto) params.append("sto", filters.sto);
     if (filters.tahun) params.append("tahun", filters.tahun);
 
@@ -77,6 +80,9 @@ export const SurveyPage = () => {
   >("/sync", {
     isAuth: true,
     invalidateQueries: [["survey"]],
+    onSuccess: (res) => {
+      toast.success(res.message);
+    },
   });
 
   const updateSurveyMutation = usePut<ApiResponse<Survey>, UpdateSurvey>(
@@ -84,6 +90,10 @@ export const SurveyPage = () => {
     {
       isAuth: true,
       invalidateQueries: [["survey"]],
+      onSuccess: (res) => {
+        toast.success(res.message);
+        handleCloseEditDialog();
+      },
     },
   );
 
@@ -92,11 +102,18 @@ export const SurveyPage = () => {
     {
       isAuth: true,
       invalidateQueries: [["survey"]],
+      onSuccess: (res) => {
+        toast.success(res.message);
+      },
     },
   );
 
   const handleSync = async () => {
-    await syncSurveyMutation.mutateAsync(null);
+    try {
+      await syncSurveyMutation.mutateAsync(null);
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Failed to sync surveys"));
+    }
   };
 
   const handleFilterChange = (newFilters: Filter) => {
@@ -105,10 +122,13 @@ export const SurveyPage = () => {
   };
 
   const handleSubmitSurvey = async (values: UpdateSurvey) => {
-    if (selectedSurvey) {
-      await updateSurveyMutation.mutateAsync(values);
+    try {
+      if (selectedSurvey) {
+        await updateSurveyMutation.mutateAsync(values);
+      }
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Failed to update survey"));
     }
-    handleCloseEditDialog();
   };
 
   const handleOpenEditDialog = (survey: Survey) => {
@@ -133,9 +153,13 @@ export const SurveyPage = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedSurvey) return;
-    await deleteSurveyMutation.mutateAsync(selectedSurvey.nomorNcx);
-    setIsDeleteDialogOpen(false);
-    setSelectedSurvey(null);
+    try {
+      await deleteSurveyMutation.mutateAsync(selectedSurvey.nomorNcx);
+      setIsDeleteDialogOpen(false);
+      setSelectedSurvey(null);
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Failed to delete survey"));
+    }
   };
 
   const surveyColumns = createSurveyColumns({

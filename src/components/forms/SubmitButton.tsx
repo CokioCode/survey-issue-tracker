@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 
 interface ButtonProps {
   isLoading: boolean;
+  isValid?: boolean;
   className?: string;
   children: React.ReactNode;
   form?: string;
@@ -11,6 +12,7 @@ interface ButtonProps {
 
 export const SubmitButton = ({
   isLoading,
+  isValid,
   className,
   children,
   form,
@@ -19,7 +21,7 @@ export const SubmitButton = ({
     <Button
       form={form}
       type="submit"
-      disabled={isLoading}
+      disabled={isLoading || !isValid}
       className={className ?? "shad-primary-btn w-full"}
     >
       {isLoading ? (
@@ -39,5 +41,3 @@ export const SubmitButton = ({
     </Button>
   );
 };
-
-export default SubmitButton;

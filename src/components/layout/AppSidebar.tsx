@@ -43,7 +43,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Survey Tracker</span>
                   <span className="truncate text-xs">
-                    {/* ✅ No hydration error - shows same content during SSR and first client render */}
                     {!mounted || !decoded
                       ? "Panel"
                       : decoded.role === "ADMIN"
