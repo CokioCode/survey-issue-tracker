@@ -13,7 +13,11 @@ import { createSurveyColumns } from "../components/SurveryCollumn";
 import { SurveyDetailDialog, SurveyDialog } from "../components/SurveyDialog";
 import type { Filter, Survey, UpdateSurvey } from "../types";
 
-export const SurveyPage = () => {
+interface SurveyProps {
+  statusJtEnum: string[];
+}
+
+export const SurveyPage = (props: SurveyProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
@@ -22,7 +26,7 @@ export const SurveyPage = () => {
   const [filters, setFilters] = useState<Filter>({
     rabHldMin: "",
     rabHldMax: "",
-    statusJt: "APPROVE",
+    statusJt: "ALL",
     sto: "",
     tahun: "",
   });
@@ -186,6 +190,7 @@ export const SurveyPage = () => {
         onPageSizeChange={pagination.handlePageSizeChange}
         onFilterChange={handleFilterChange}
         onCreateClick={handleSync}
+        statusJtEnum={props.statusJtEnum}
         createButtonText={
           syncSurveyMutation.isPending ? (
             <RefreshCw className="animate-spin" />
@@ -199,6 +204,7 @@ export const SurveyPage = () => {
 
       {isAdmin && selectedSurvey && (
         <SurveyDialog
+          statusJtEnum={props.statusJtEnum}
           isOpen={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
           onSubmit={handleSubmitSurvey}

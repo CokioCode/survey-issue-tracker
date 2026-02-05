@@ -86,15 +86,27 @@ export const statusJtEnum = [
   "INPUT_PAKET_LAIN",
 ] as const;
 
-export const filterSchema = z.object({
-  statusJt: z.enum(statusJtEnum),
-  rabHldMin: z.string().optional(),
-  rabHldMax: z.string().optional(),
-  tahun: z.string().optional().nullable(),
-  sto: z.string().optional(),
-});
+export const buildFilterSchema = (statusEnum: string[]) =>
+  z.object({
+    statusJt: z
+      .string()
+      .optional()
+      .refine((val) => !val || statusEnum.includes(val), {
+        message: "",
+      }),
+    rabHldMin: z.string().optional(),
+    rabHldMax: z.string().optional(),
+    tahun: z.string().optional().nullable(),
+    sto: z.string().optional(),
+  });
 
-export type Filter = z.infer<typeof filterSchema>;
+export type Filter = {
+  statusJt?: string;
+  rabHldMin?: string;
+  rabHldMax?: string;
+  tahun?: string | null;
+  sto?: string;
+};
 
 export const surveySchema = z.object({
   id: z.uuid(),

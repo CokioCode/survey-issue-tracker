@@ -55,6 +55,7 @@ interface DataTableProps<TData, TValue> {
   onFilterChange?: (filters: Filter) => void;
   disabled?: boolean;
   isAdmin?: boolean;
+  statusJtEnum?: string[];
 }
 
 export function DataTable<TData, TValue>({
@@ -75,6 +76,7 @@ export function DataTable<TData, TValue>({
   onFilterChange,
   disabled,
   isAdmin,
+  statusJtEnum,
 }: DataTableProps<TData, TValue>) {
   const mounted = useMounted();
 
@@ -126,7 +128,12 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
             disabled={loading}
           />
-          {onFilterChange && <FilterDrawer onFilterChange={onFilterChange} />}
+          {onFilterChange && (
+            <FilterDrawer
+              onFilterChange={onFilterChange}
+              statusJtEnum={statusJtEnum ?? []}
+            />
+          )}
           {mounted && onCreateClick && isAdmin && (
             <Button
               onClick={onCreateClick}

@@ -118,7 +118,7 @@ export const createSurveyColumns = (
         variant={getStatusJtBadgeVariant(row.original.statusJt)}
         className="font-medium"
       >
-        {row.original.statusJt?.replace("_", " ") || "-"}
+        {row.original.statusJt?.replaceAll("_", " ") || "-"}
       </Badge>
     ),
     size: 120,

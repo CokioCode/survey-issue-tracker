@@ -22,10 +22,11 @@ import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { SelectItem } from "@/components/ui/select";
 import { formatCurrency, RAB_RANGES } from "@/lib/utils";
-import { type Filter, filterSchema, statusJtEnum } from "../types";
+import { buildFilterSchema, type Filter } from "../types";
 
 interface FilterDrawerProps {
   onFilterChange?: (filters: Filter) => void;
+  statusJtEnum: string[];
 }
 
 export const FilterDrawer = (props: FilterDrawerProps) => {
@@ -34,12 +35,12 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
   const [showCustomRange, setShowCustomRange] = useState(false);
 
   const form = useForm<Filter>({
-    resolver: zodResolver(filterSchema),
+    resolver: zodResolver(buildFilterSchema(props.statusJtEnum)),
     mode: "onChange",
     defaultValues: {
       rabHldMin: "",
       rabHldMax: "",
-      statusJt: "APPROVE",
+      statusJt: "ALL",
       sto: "",
       tahun: "",
     },
@@ -53,7 +54,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
     const emptyFilter: Filter = {
       rabHldMin: "",
       rabHldMax: "",
-      statusJt: "APPROVE",
+      statusJt: "ALL",
       sto: "",
       tahun: "",
     };
@@ -119,7 +120,7 @@ export const FilterDrawer = (props: FilterDrawerProps) => {
                 label="Status JT"
                 placeholder="Pilih status"
               >
-                {statusJtEnum.map((status) => (
+                {props.statusJtEnum.map((status: string) => (
                   <SelectItem key={status} value={status}>
                     {status.replaceAll("_", " ")}
                   </SelectItem>

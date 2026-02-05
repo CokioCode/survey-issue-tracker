@@ -20,18 +20,14 @@ import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getStatusJtBadgeVariant } from "@/lib/utils";
-import {
-  type Survey,
-  statusJtEnum,
-  type UpdateSurvey,
-  updateSurveySchema,
-} from "../types";
+import { type Survey, type UpdateSurvey, updateSurveySchema } from "../types";
 
 interface SurveyDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: UpdateSurvey) => Promise<void>;
   survey: Survey;
+  statusJtEnum: string[];
 }
 
 export const SurveyDialog = ({
@@ -39,6 +35,7 @@ export const SurveyDialog = ({
   onOpenChange,
   onSubmit,
   survey,
+  statusJtEnum,
 }: SurveyDialogProps) => {
   const form = useForm<UpdateSurvey>({
     resolver: zodResolver(updateSurveySchema),

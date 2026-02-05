@@ -53,7 +53,7 @@ export const DashboardPage = () => {
               value={form.watch("hariTerakhir")}
               onValueChange={handleSelectChange}
             >
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="Select range" />
               </SelectTrigger>
               <SelectContent>
